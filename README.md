@@ -125,6 +125,33 @@ Endpoint Windows 11 (`baclev`) được cấu hình giám sát sâu với 3 ngu�
 3. **Microsoft-Windows-PowerShell/Operational:**
    * **Event ID 4104 (ScriptBlock Logging):** Bóc tách nội dung kịch bản lệnh đầy đủ ngay cả khi kẻ tấn công thực thi bằng kỹ thuật làm rối (Obfuscation) hoặc mã hóa Base64 (`-EncodedCommand`).
 
+<details>
+<summary><b>📄 Xem trích đoạn cấu hình Telemetry trong ossec.conf trên Windows Agent (Click để mở rộng)</b></summary>
+
+```xml
+<!-- Windows Security EventChannel -->
+<localfile>
+  <location>Security</location>
+  <log_format>eventchannel</log_format>
+</localfile>
+
+<!-- Microsoft Sysmon EventChannel -->
+<localfile>
+  <location>Microsoft-Windows-Sysmon/Operational</location>
+  <log_format>eventchannel</log_format>
+</localfile>
+
+<!-- PowerShell Script Block Logging EventChannel -->
+<localfile>
+  <location>Microsoft-Windows-PowerShell/Operational</location>
+  <log_format>eventchannel</log_format>
+</localfile>
+```
+
+</details>
+
+<br/>
+
 <p align="center">
   <img src="evidence/agent-active.png" alt="Wazuh Agent baclev Active Status" width="850">
   <br/>
