@@ -1,0 +1,77 @@
+{
+  "name": "SOC Home Lab - Wazuh Detection Coverage (Le Viet Bac)",
+  "versions": {
+    "attack": "14",
+    "navigator": "4.9.1",
+    "layer": "4.5"
+  },
+  "domain": "enterprise-attack",
+  "description": "Ma trận độ phủ các quy tắc phát hiện (Detection Rules) trên Wazuh SIEM trong dự án SOC Home Lab.",
+  "sorting": 0,
+  "layout": {
+    "layout": "side",
+    "aggregateFunction": "average",
+    "showID": true,
+    "showName": true,
+    "showAggregateScores": false,
+    "countUnscored": false
+  },
+  "hideDisabled": false,
+  "techniques": [
+    {
+      "techniqueID": "T1110",
+      "tactic": "credential-access",
+      "color": "#31a354",
+      "comment": "Covered by Custom Wazuh Rule 100500 (Windows Security Event ID 4625 - RDP Brute-force)",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": false
+    },
+    {
+      "techniqueID": "T1059.001",
+      "tactic": "execution",
+      "color": "#31a354",
+      "comment": "Covered by Wazuh Rule 100710 & Default PowerShell ScriptBlock Rules (Event ID 4104) - Tested via Atomic Red Team",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1562",
+      "tactic": "defense-evasion",
+      "color": "#31a354",
+      "comment": "Covered by Wazuh Rule 60106 (Windows Service Control Manager / Impair Defenses)",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "T1562.004",
+      "tactic": "defense-evasion",
+      "color": "#31a354",
+      "comment": "Covered by Wazuh Rule 100602 (Sysmon Event ID 1 - netsh.exe Firewall Modification)",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#ff6666ff",
+      "#ffe766ff",
+      "#8ec843ff"
+    ],
+    "minValue": 0,
+    "maxValue": 100
+  },
+  "legendItems": [
+    {
+      "label": "Đã phủ Detection Rule & Kiểm thử (Covered)",
+      "color": "#31a354"
+    }
+  ]
+}

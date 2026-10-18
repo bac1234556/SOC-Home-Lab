@@ -1,0 +1,41 @@
+<!--
+  File: /var/ossec/etc/rules/local_rules.xml
+  Author: Le Viet Bac
+  Description: Custom Detection Rules cho SOC Home Lab (Ánh xạ MITRE ATT&CK)
+-->
+<group name="local,windows,security,">
+
+  <!-- Rule 100500: Phát hiện đăng nhập thất bại Windows / RDP Brute-force (Event 4625) -->
+  <rule id="100500" level="10">
+    <if_sid>60106, 60122</if_sid>
+    <field name="win.system.eventID">^4625$</field>
+    <description>SOC Lab Alert: Phát hiện đăng nhập thất bại Windows / RDP Brute-force (T1110)</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+
+  <!-- Rule 100602: Phát hiện hành vi can thiệp Windows Firewall qua netsh.exe -->
+  <rule id="100602" level="10">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.image">\\netsh.exe</field>
+    <field name="win.eventdata.commandLine">firewall|advfirewall</field>
+    <description>SOC Lab Alert: Phát hiện tiến trình netsh.exe sửa đổi cấu hình Tường lửa (T1562.004)</description>
+    <mitre>
+      <id>T1562.004</id>
+    </mitre>
+  </rule>
+
+  <!-- Rule 100710: Phát hiện PowerShell thực thi lệnh mã hóa Base64 (EncodedCommand) -->
+  <rule id="100710" level="12">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.image">\\powershell.exe</field>
+    <field name="win.eventdata.commandLine">-EncodedCommand|-enc|-e </field>
+    <description>SOC Lab Alert: Phát hiện PowerShell thực thi kịch bản mã hóa đáng ngờ (T1059.001)</description>
+    <mitre>
+      <id>T1059.001</id>
+    </mitre>
+  </rule>
+
+</group>

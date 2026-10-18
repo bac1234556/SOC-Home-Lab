@@ -1,0 +1,22 @@
+title: Windows Failed Logon / RDP Brute-Force Attempt
+id: 8f4a2b10-5c1e-4a9b-8d2f-100500abcdef
+status: stable
+description: Phát hiện các sự kiện đăng nhập thất bại trên Windows (Event ID 4625), dấu hiệu của hành vi tấn công dò mật khẩu (Brute-force) qua RDP hoặc SMB.
+author: Le Viet Bac (SOC Home Lab)
+date: 2026/10/07
+references:
+  - https://attack.mitre.org/techniques/T1110/
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4625
+  condition: selection
+falsepositives:
+  - Người dùng nhập sai mật khẩu hợp lệ trong quá trình làm việc hàng ngày.
+  - Dịch vụ chạy nền lưu mật khẩu cũ sau khi người dùng đổi mật khẩu.
+level: high
+tags:
+  - attack.credential_access
+  - attack.t1110
