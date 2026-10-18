@@ -1,12 +1,17 @@
 {
   "name": "SOC Home Lab - Wazuh Detection Coverage (Le Viet Bac)",
   "versions": {
-    "attack": "14",
-    "navigator": "4.9.1",
+    "attack": "20",
+    "navigator": "5.0.0",
     "layer": "4.5"
   },
   "domain": "enterprise-attack",
-  "description": "Ma trận độ phủ các quy tắc phát hiện (Detection Rules) trên Wazuh SIEM trong dự án SOC Home Lab.",
+  "description": "Detection Coverage for SOC Home Lab Portfolio - Le Viet Bac",
+  "filters": {
+    "platforms": [
+      "Windows"
+    ]
+  },
   "sorting": 0,
   "layout": {
     "layout": "side",
@@ -21,18 +26,20 @@
     {
       "techniqueID": "T1110",
       "tactic": "credential-access",
+      "score": 1,
       "color": "#31a354",
-      "comment": "Covered by Custom Wazuh Rule 100500 (Windows Security Event ID 4625 - RDP Brute-force)",
+      "comment": "Rule 100500: Windows RDP Brute Force Detection (Event ID 4625)",
       "enabled": true,
       "metadata": [],
       "links": [],
-      "showSubtechniques": false
+      "showSubtechniques": true
     },
     {
       "techniqueID": "T1059.001",
       "tactic": "execution",
+      "score": 1,
       "color": "#31a354",
-      "comment": "Covered by Wazuh Rule 100710 & Default PowerShell ScriptBlock Rules (Event ID 4104) - Tested via Atomic Red Team",
+      "comment": "Rule 900000: Suspicious Encoded PowerShell Execution",
       "enabled": true,
       "metadata": [],
       "links": [],
@@ -41,8 +48,9 @@
     {
       "techniqueID": "T1562",
       "tactic": "defense-evasion",
+      "score": 1,
       "color": "#31a354",
-      "comment": "Covered by Wazuh Rule 60106 (Windows Service Control Manager / Impair Defenses)",
+      "comment": "Impair Defenses Coverage",
       "enabled": true,
       "metadata": [],
       "links": [],
@@ -51,8 +59,9 @@
     {
       "techniqueID": "T1562.004",
       "tactic": "defense-evasion",
+      "score": 1,
       "color": "#31a354",
-      "comment": "Covered by Wazuh Rule 100602 (Sysmon Event ID 1 - netsh.exe Firewall Modification)",
+      "comment": "Rule 100602: Disable or Modify System Firewall via netsh",
       "enabled": true,
       "metadata": [],
       "links": [],
@@ -61,17 +70,23 @@
   ],
   "gradient": {
     "colors": [
-      "#ff6666ff",
-      "#ffe766ff",
-      "#8ec843ff"
+      "#ff6666",
+      "#ffe766",
+      "#8ec843"
     ],
     "minValue": 0,
     "maxValue": 100
   },
   "legendItems": [
     {
-      "label": "Đã phủ Detection Rule & Kiểm thử (Covered)",
+      "label": "Tested & Detected in SOC Lab",
       "color": "#31a354"
     }
-  ]
+  ],
+  "metadata": [],
+  "links": [],
+  "showTacticRowBackground": false,
+  "tacticRowBackground": "#dddddd",
+  "selectTechniquesAcrossTactics": true,
+  "selectSubtechniquesWithParent": true
 }
