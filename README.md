@@ -3,7 +3,7 @@
 # 🛡️ ENTERPRISE SOC HOME LAB
 ### Threat Detection, Telemetry Engineering & Adversary Emulation with Wazuh SIEM
 
-**Tác giả:** Lê Việt Bắc | **Định hướng:** SOC Analyst / Blue Team Security Engineer  
+**Tác giả:** Lê Việt Bắc | **Định hướng:** SOC Analyst   
 **Trường đào tạo:** Trường Đại học CMC (CMC University)  
 **Repository:** [github.com/bac1234556/SOC-Home-Lab](https://github.com/bac1234556/SOC-Home-Lab)
 
