@@ -1,25 +1,56 @@
 <!--
-  File: /var/ossec/etc/rules/local_rules.xml
+  =============================================================================
+  Wazuh Custom Detection Rules - SOC Home Lab Portfolio
+  Target File: /var/ossec/etc/rules/local_rules.xml (Wazuh Manager)
   Author: Le Viet Bac
-  Description: Custom Detection Rules cho SOC Home Lab (Ánh xạ MITRE ATT&CK)
+  Target Platform: Windows 11 Endpoint (baclev) with Sysmon & Security Audit
+  =============================================================================
 -->
+
 <group name="local,windows,security,">
 
-  <!-- Rule 100500: Phát hiện đăng nhập thất bại Windows / RDP Brute-force (Event 4625) -->
+  <!--
+    RULE 100500: Phát hiện đăng nhập thất bại Windows (Event ID 4625)
+    - Trạng thái kiểm thử: ĐÃ XÁC THỰC THỰC TẾ TRÊN WAZUH MANAGER (Xem logtest-100500.png)
+    - Nguồn dữ liệu: Windows Security EventChannel (Provider: Microsoft-Windows-Security-Auditing)
+    - Logic: Kế thừa rule cha 60106/60122 và lọc chính xác eventID == 4625.
+  -->
   <rule id="100500" level="10">
     <if_sid>60106, 60122</if_sid>
     <field name="win.system.eventID">^4625$</field>
-    <description>SOC Lab Alert: Phát hiện đăng nhập thất bại Windows / RDP Brute-force (T1110)</description>
+    <description>SOC Lab Alert: Phat hien dang nhap RDP/Network that bai tu IP $(win.eventdata.ipAddress)</description>
     <mitre>
       <id>T1110</id>
     </mitre>
     <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
   </rule>
 
-  <!-- Rule 100602: Phát hiện hành vi can thiệp Windows Firewall qua netsh.exe -->
+  <!--
+    RULE 100501: Correlation Rule - Phát hiện tấn công RDP Brute-Force liên tục
+    - Trạng thái kiểm thử: Phân tích kiến trúc & Tương quan tần suất (Frequency Correlation)
+    - Logic: Nếu Rule 100500 kích hoạt 5 lần từ CÙNG MỘT ĐỊA CHỈ IP trong vòng 60 giây,
+      nâng mức cảnh báo lên Level 12 (Critical) để giảm false positive từ việc gõ nhầm pass.
+  -->
+  <rule id="100501" level="12" frequency="5" timeframe="60">
+    <if_matched_sid>100500</if_matched_sid>
+    <same_field>win.eventdata.ipAddress</same_field>
+    <description>SOC Lab Alert: Tấn công RDP Brute-Force liên tục (>= 5 thất bại / 60s) từ IP $(win.eventdata.ipAddress)</description>
+    <mitre>
+      <id>T1110</id>
+      <id>T1110.001</id>
+    </mitre>
+    <group>authentication_failed,attack_t1110,</group>
+  </rule>
+
+  <!--
+    RULE 100602: Phát hiện hành vi can thiệp Windows Firewall qua netsh.exe
+    - Trạng thái kiểm thử: Phân tích tĩnh & Kiểm thử kịch bản Atomic Red Team
+    - Nguồn dữ liệu: Sysmon Event ID 1 (Process Creation)
+    - MITRE ATT&CK: Defense Evasion -> T1562.004 (Impair Defenses: Disable or Modify System Firewall)
+  -->
   <rule id="100602" level="10">
     <if_group>sysmon_event1</if_group>
-    <field name="win.eventdata.image">\\netsh.exe</field>
+    <field name="win.eventdata.image">\\netsh\.exe$</field>
     <field name="win.eventdata.commandLine">firewall|advfirewall</field>
     <description>SOC Lab Alert: Phát hiện tiến trình netsh.exe sửa đổi cấu hình Tường lửa (T1562.004)</description>
     <mitre>
@@ -27,15 +58,40 @@
     </mitre>
   </rule>
 
-  <!-- Rule 100710: Phát hiện PowerShell thực thi lệnh mã hóa Base64 (EncodedCommand) -->
+  <!--
+    RULE 100710: Phát hiện PowerShell thực thi lệnh mã hóa Base64 (EncodedCommand)
+    - Trạng thái kiểm thử: Phân tích tĩnh & Đối chiếu Telemetry thực tế từ Atomic Red Team T1059.001
+    - Nguồn dữ liệu: Sysmon Event ID 1 (Process Creation)
+    - MITRE ATT&CK: Execution -> T1059.001 (Command and Scripting Interpreter: PowerShell)
+  -->
   <rule id="100710" level="12">
     <if_group>sysmon_event1</if_group>
-    <field name="win.eventdata.image">\\powershell.exe</field>
+    <field name="win.eventdata.image">\\powershell\.exe$</field>
     <field name="win.eventdata.commandLine">-EncodedCommand|-enc|-e </field>
-    <description>SOC Lab Alert: Phát hiện PowerShell thực thi kịch bản mã hóa đáng ngờ (T1059.001)</description>
+    <description>SOC Lab Alert: Phát hiện PowerShell thực thi kịch bản mã hóa Base64 (T1059.001)</description>
     <mitre>
       <id>T1059.001</id>
     </mitre>
   </rule>
 
 </group>
+
+<!--
+  =============================================================================
+  TEST CASES & DETECTION VALIDATION GUIDE:
+  =============================================================================
+  1. Test Case cho Rule 100500 (Đã chạy wazuh-logtest thành công):
+     - Positive Payload (JSON):
+       {"win":{"system":{"providerName":"Microsoft-Windows-Security-Auditing","eventID":"4625","level":"0","channel":"Security"},"eventdata":{"targetUserName":"administrator","logonType":"10","ipAddress":"10.10.30.50","subStatus":"0xc000006a"}}}
+     - Expected: Phase 3 khớp Rule 100500, Level 10, MITRE T1110.
+     - Negative Test: Gửi payload với eventID là 4624 (Logon Success). Rule 100500 không được kích hoạt.
+
+  2. Test Case cho Rule 100602:
+     - Positive Command: netsh.exe advfirewall firewall set rule name="all" new enable=no
+     - Negative Command: netsh.exe interface ip show config (không chứa từ khóa firewall/advfirewall).
+
+  3. Test Case cho Rule 100710:
+     - Positive Command: powershell.exe -enc SQBFAFgA...
+     - Negative Command: powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\script.ps1 (chạy bình thường không mã hóa).
+  =============================================================================
+-->

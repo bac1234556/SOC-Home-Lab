@@ -1,22 +1,48 @@
-title: Windows Failed Logon / RDP Brute-Force Attempt
+title: Windows Single Failed Logon Attempt (Potential RDP/Network Brute-Force Precursor)
 id: 8f4a2b10-5c1e-4a9b-8d2f-100500abcdef
-status: stable
-description: Phát hiện các sự kiện đăng nhập thất bại trên Windows (Event ID 4625), dấu hiệu của hành vi tấn công dò mật khẩu (Brute-force) qua RDP hoặc SMB.
+status: test
+description: >
+  Phát hiện sự kiện đăng nhập thất bại đơn lẻ (Event ID 4625) với Logon Type 10 (RDP) hoặc 3 (Network).
+  Quy tắc này đóng vai trò là Base Rule; trong hệ thống SIEM (Wazuh), nó được kết hợp với quy tắc tương quan (Correlation Rule)
+  để đếm ngưỡng tần suất (>= 5 lần trong 60 giây từ cùng một IP nguồn) nhằm xác định chính xác tấn công Brute-Force
+  thực sự và giảm thiểu cảnh báo giả (False Positives).
 author: Le Viet Bac (SOC Home Lab)
 date: 2026/10/07
+modified: 2026/10/19
 references:
   - https://attack.mitre.org/techniques/T1110/
+  - https://attack.mitre.org/techniques/T1110/001/
+  - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4625
 logsource:
   product: windows
   service: security
 detection:
   selection:
     EventID: 4625
+    LogonType:
+      - 10  # RemoteInteractive (RDP)
+      - 3   # Network (SMB / PsExec)
   condition: selection
 falsepositives:
-  - Người dùng nhập sai mật khẩu hợp lệ trong quá trình làm việc hàng ngày.
-  - Dịch vụ chạy nền lưu mật khẩu cũ sau khi người dùng đổi mật khẩu.
-level: high
+  - Người dùng nhập sai mật khẩu cá nhân trong quá trình làm việc hàng ngày.
+  - Các tiến trình nền hoặc ứng dụng lưu thông tin xác thực cũ sau khi đổi mật khẩu tài khoản.
+level: medium
 tags:
   - attack.credential_access
   - attack.t1110
+  - attack.t1110.001
+
+# =============================================================================
+# SIGMA CORRELATION SPECIFICATION (Đề xuất cho quy tắc tương quan đa sự kiện):
+# =============================================================================
+# action: correlation
+# type: event_count
+# rules:
+#   - 8f4a2b10-5c1e-4a9b-8d2f-100500abcdef
+# group-by:
+#   - IpAddress
+# timespan: 1m
+# condition:
+#   gte: 5
+# level: high
+# =============================================================================

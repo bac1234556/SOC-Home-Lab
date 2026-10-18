@@ -39,7 +39,7 @@
       "tactic": "execution",
       "score": 1,
       "color": "#31a354",
-      "comment": "Rule 900000: Suspicious Encoded PowerShell Execution",
+      "comment": "Rule 100710: Suspicious Encoded PowerShell Execution (Sysmon Event ID 1)",
       "enabled": true,
       "metadata": [],
       "links": [],

@@ -1,0 +1,31 @@
+# Operating System Files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_out.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary and Log Files
+*.log
+*.tmp
+*.bak
+*.old
+
+# Sensitive Data and Credentials (Precautionary)
+*.key
+*.pem
+*.pfx
+*.cert
+*.env
+*.env.*
+credentials.json
+token.txt
+ConsoleHost_history.txt
