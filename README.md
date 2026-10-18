@@ -352,4 +352,4 @@ SOC-Home-Lab/
 * **Chuyên ngành:** Công nghệ Thông tin / An toàn Thông tin - Trường Đại học CMC
 * **GitHub Profile:** [github.com/bac1234556](https://github.com/bac1234556)
 * **Email liên hệ:** bacleviet43@gmail.com
-* **Mục tiêu nghề nghiệp:** SOC Analyst Intern • Junior Blue Team • Detection Engineer
+* **Mục tiêu nghề nghiệp:** SOC Analyst Intern • Junior Blue Team •
