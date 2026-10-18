@@ -87,12 +87,12 @@ Chi tiết các bước cài đặt và chạy lệnh được lưu tại [`simu
 
 ### 5.2. Kết quả Giám sát & Săn tìm mối đe dọa trên Wazuh Dashboard
 Sau khi chạy các kịch bản mô phỏng tấn công và thử nghiệm xác thực, toàn bộ telemetry đã được Wazuh Manager thu nhận, phân tích và trực quan hóa trên giao diện Threat Hunting:
-* **Tổng số sự kiện ghi nhận (24h):** 2,218 sự kiện.
-* **Cảnh báo mức độ nghiêm trọng cao (Level 12+):** 328 cảnh báo.
-* **Sự kiện xác thực:** Ghi nhận chính xác các lượt *Authentication failure* và *Authentication success*.
+* **Tổng số sự kiện ghi nhận (24h):** 2,960 sự kiện.
+* **Cảnh báo mức độ nghiêm trọng cao (Level 12+):** 367 cảnh báo.
+* **Sự kiện xác thực:** Ghi nhận 5 lượt *Authentication failure* và 11 lượt *Authentication success*.
 * **Phân bổ MITRE ATT&CK:** Nhận diện rõ nét các kỹ thuật *Ingress Tool Transfer*, *Windows Command Scripting*, *PowerShell*, *Account Discovery* và *Password Guessing*.
 
-![Hình 4: Giao diện Wazuh Threat Hunting Dashboard thống kê 2,218 sự kiện và 328 cảnh báo mức cao từ agent baclev.](evidence/wazuh-threat-hunting-dashboard.png)
+![Hình 4: Giao diện Wazuh Threat Hunting Dashboard thống kê 2,960 sự kiện và 367 cảnh báo mức cao từ agent baclev.](evidence/wazuh-threat-hunting-dashboard.png)
 
 ---
 

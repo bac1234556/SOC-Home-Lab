@@ -58,4 +58,4 @@ Invoke-AtomicTest T1059.001 -TestNumbers 1
 ---
 
 ## 4. Kết quả Quan sát trên Wazuh SIEM
-Các hành vi tải công cụ (*Ingress Tool Transfer*), thực thi kịch bản (*PowerShell*, *Windows Command Scripting*) và dò mật khẩu (*Password Guessing*) ngay lập tức sinh ra **328 cảnh báo mức độ nghiêm trọng cao (Level 12+)** trên tổng số **2,218 sự kiện** được đẩy về Wazuh Manager từ agent `baclev`.
+Các hành vi tải công cụ (*Ingress Tool Transfer*), thực thi kịch bản (*PowerShell*, *Windows Command Scripting*) và dò mật khẩu (*Password Guessing*) ngay lập tức sinh ra **367 cảnh báo mức độ nghiêm trọng cao (Level 12+)** trên tổng số **2,960 sự kiện** được đẩy về Wazuh Manager từ agent `baclev`.
