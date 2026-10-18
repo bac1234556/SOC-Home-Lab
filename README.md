@@ -55,6 +55,27 @@ graph LR
    * Cài đặt Sysmon với cấu hình chuẩn hóa nhằm giám sát tiến trình hệ thống (Event ID `1`), kết nối mạng ra ngoài (Event ID `3`), thay đổi khóa Registry khởi động cùng hệ thống (Event ID `12`, `13`).
 3. **Microsoft-Windows-PowerShell/Operational:**
    * Bật Script Block Logging (Event ID `4104`) để bóc tách mã nguồn lệnh PowerShell ngay cả khi bị kẻ tấn công obfuscate hoặc mã hóa Base64.
+<details>
+<summary><b>📄 Xem trích đoạn cấu hình Telemetry trong ossec.conf (Click để mở)</b></summary>
+
+```xml
+<!-- Windows Security EventChannel -->
+<localfile>
+  <location>Security</location>
+  <log_format>eventchannel</log_format>
+</localfile>
+
+<!-- Microsoft Sysmon EventChannel -->
+<localfile>
+  <location>Microsoft-Windows-Sysmon/Operational</location>
+  <log_format>eventchannel</log_format>
+</localfile>
+
+<!-- PowerShell Script Block Logging EventChannel -->
+<localfile>
+  <location>Microsoft-Windows-PowerShell/Operational</location>
+  <log_format>eventchannel</log_format>
+</localfile>
 
 ![Giao diện quản lý Wazuh Endpoints xác nhận Agent 001 baclev đang Active](evidence/agent-active.png)  
 *Hình 1: Wazuh Dashboard xác nhận Agent `001 - baclev` (`10.10.10.100`) đã đăng ký thành công và duy trì trạng thái kết nối thời gian thực (Active).*
